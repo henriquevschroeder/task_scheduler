@@ -2,6 +2,11 @@
 
 Esse projeto implementa algoritmos de escalonamento de tarefas: Round-Robin com Prioridade (RR_p) e o Earliest Deadline First (EDF).
 
+## Alunos
+
+- Henrique Valiati Schroeder
+- Arthur Felipe Carminati
+
 ## Requisitos
 
 - Sobre o RR_p, a prioridade só será levada em conta na escolha de qual task deve ser executada caso haja duas (ou mais) tasks para serem executadas no momento. Em caso de prioridades iguais, pode implementar o seu critério, como quem é a primeira da lista (por exemplo). Nesse trabalho, considere a maior prioridade como sendo 1. Além disso, é obrigatório o uso de múltiplas filas para a gerência de prioridade.
