@@ -1,0 +1,10 @@
+{
+   "files.associations": {
+      "*.embeddedhtml": "html",
+      "scheduler.h": "c",
+      "cpu.h": "c",
+      "task.h": "c",
+      "stdlib.h": "c",
+      "scheduler_edf.h": "c"
+   }
+}
