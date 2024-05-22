@@ -4,10 +4,8 @@
 #include "cpu.h"
 #include "task.h"
 #include "list.h"
+#include "globals.h"
 #include "scheduler_rr.h"
-
-// List of tasks (one for each priority)
-struct Node *task_list[MAX_PRIORITY + 1];
 
 // Add a task to the tasks list (Round-Robin with Priority)
 void add_rr(char *name, int priority, int burst)

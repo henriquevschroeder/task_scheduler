@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Iinclude -Wall
-OBJ = src/driver.o src/cpu.o src/list.o src/scheduler_rr.o src/scheduler_edf.o
-DEPS = include/cpu.h include/list.h include/scheduler_rr.h include/scheduler_edf.h include/task.h
+OBJ = src/driver.o src/cpu.o src/list.o src/scheduler_rr.o src/scheduler_edf.o src/globals.o
+DEPS = include/cpu.h include/list.h include/scheduler_rr.h include/scheduler_edf.h include/task.h include/globals.h
 
 all: program
 

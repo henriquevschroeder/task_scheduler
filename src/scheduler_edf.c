@@ -4,9 +4,7 @@
 #include "task.h"
 #include "list.h"
 #include "scheduler_edf.h"
-
-// List of tasks (ordered by deadline)
-struct Node *task_list = NULL;
+#include "globals.h"
 
 // Add a new task to the list of tasks (Earliest Deadline First)
 void add_edf(char *name, int priority, int burst, int deadline)
@@ -18,13 +16,13 @@ void add_edf(char *name, int priority, int burst, int deadline)
   newTask->deadline = deadline;
 
   // Add the task to the list in order of deadline
-  if (task_list == NULL || task_list->task->deadline > deadline)
+  if (task_list[priority] == NULL || task_list[priority]->task->deadline > deadline)
   {
-    insert(&task_list, newTask);
+    insert(&task_list[priority], newTask);
   }
   else
   {
-    struct Node *temp = task_list;
+    struct Node *temp = task_list[priority];
 
     while (temp->next != NULL && temp->next->task->deadline <= deadline)
     {
@@ -41,11 +39,22 @@ void add_edf(char *name, int priority, int burst, int deadline)
 // Invoke the scheduler (Earliest Deadline First)
 void schedule_edf()
 {
-  while (task_list != NULL)
+  for (int i = MIN_PRIORITY; i <= MAX_PRIORITY; i++)
   {
-    Task *task = task_list->task;
-    delete(&task_list, task);
-    run(task, task->burst);
-    free(task);
+    while (task_list[i] != NULL)
+    {
+      struct Node *temp = task_list[i];
+      Task *task = temp->task;
+      delete(&task_list[i], task);
+
+      while (task->burst > 0)
+      {
+        run(task, task->burst);
+        task->burst = 0;
+      }
+
+      free(task->name);
+      free(task);
+    }
   }
 }
