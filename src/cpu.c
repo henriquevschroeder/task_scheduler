@@ -5,7 +5,7 @@
 void run(Task *task, int slice)
 {
   printf(
-    "Running task = [%s] [Priority: %d] [Burst: %d] for %d units of time.\n",
+    "[Task %s] => [Priority: %d] [Bursts Remaining: %d] [Runned for %d units of time]\n",
     task->name, task->priority, task->burst, slice
   );
 }
