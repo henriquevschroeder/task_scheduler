@@ -9,4 +9,7 @@
 // Global task list
 extern struct Node *task_list[MAX_PRIORITY + 1];
 
+// Global variable to indicate timer interrupt
+extern volatile int timer_interrupt;
+
 #endif

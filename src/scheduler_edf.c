@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include "task.h"
 #include "list.h"
 #include "scheduler_edf.h"
 #include "globals.h"
+#include "timer.h"
+
+extern void run(Task *task, int slice);
 
 // Add a new task to the list of tasks (Earliest Deadline First)
 void add_edf(char *name, int priority, int burst, int deadline)
@@ -39,6 +43,9 @@ void add_edf(char *name, int priority, int burst, int deadline)
 // Invoke the scheduler (Earliest Deadline First)
 void schedule_edf()
 {
+  pthread_t timer_thread;
+  pthread_create(&timer_thread, NULL, timer, NULL);
+
   for (int i = MIN_PRIORITY; i <= MAX_PRIORITY; i++)
   {
     while (task_list[i] != NULL)
@@ -49,12 +56,23 @@ void schedule_edf()
 
       while (task->burst > 0)
       {
-        run(task, task->burst);
-        task->burst = 0;
-      }
+        while (!timer_interrupt);  // Wait for the timer interrupt
+        timer_interrupt = 0;  // Reset the timer interrupt flag
 
-      free(task->name);
-      free(task);
+        run(task, 1);  // Simulate running the task for 1 time unit
+        task->burst -= 1;
+
+        // Check if the task is completed
+        if (task->burst == 0)
+        {
+          free(task->name);
+          free(task);
+          break;
+        }
+      }
     }
   }
+
+  pthread_cancel(timer_thread);
+  pthread_join(timer_thread, NULL);
 }

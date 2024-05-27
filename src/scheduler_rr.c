@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include "cpu.h"
 #include "task.h"
 #include "list.h"
 #include "scheduler_rr.h"
 #include "globals.h"
+#include "timer.h"
+
+extern void run(Task *task, int slice);
 
 // Add a task to the tasks list (Round-Robin with Priority)
 void add_rr(char *name, int priority, int burst)
@@ -38,6 +42,9 @@ void add_rr(char *name, int priority, int burst)
 // Invoke the Scheduler (Round-Robin with Priority)
 void schedule_rr()
 {
+  pthread_t timer_thread;
+  pthread_create(&timer_thread, NULL, timer, NULL);
+
   int all_tasks_done = 0;
 
   while (!all_tasks_done)
@@ -54,8 +61,15 @@ void schedule_rr()
         delete(&task_list[i], task);
 
         int slice = (task->burst > QUANTUM) ? QUANTUM : task->burst;
-        run(task, slice);
-        task->burst -= slice;
+        while (slice > 0)
+        {
+          while (!timer_interrupt);  // Wait for the timer interrupt
+          timer_interrupt = 0;  // Reset the timer interrupt flag
+
+          run(task, 1);  // Simulate running the task for 1 time unit
+          task->burst -= 1;
+          slice -= 1;
+        }
 
         if (task->burst > 0)
         {
@@ -75,4 +89,7 @@ void schedule_rr()
       }
     }
   }
+
+  pthread_cancel(timer_thread);
+  pthread_join(timer_thread, NULL);
 }
