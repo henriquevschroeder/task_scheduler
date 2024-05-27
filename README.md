@@ -1,26 +1,21 @@
-# Escalonador de Tarefas
+# Task Scheduler
 
-Esse projeto implementa algoritmos de escalonamento de tarefas: Round-Robin com Prioridade (RR_p) e o Earliest Deadline First (EDF).
+This project implements task scheduling algorithms: Round-Robin with Priority (RR_p) and Earliest Deadline First (EDF).
 
-## Alunos
+## Requirements
 
-- Henrique Valiati Schroeder
-- Arthur Felipe Carminati
+- Regarding RR_p, priority should only be considered when choosing which task to execute if there are two (or more) tasks to be executed at the moment. In case of equal priorities, you can implement your own criterion, such as the one that is first in the list (for example). In this project, consider the highest priority to be 1. Additionally, the use of multiple queues for priority management is mandatory.
 
-## Requisitos
+- You should consider more ready queues for different priorities. Add two tasks for each created priority.
 
-- Sobre o RR_p, a prioridade só será levada em conta na escolha de qual task deve ser executada caso haja duas (ou mais) tasks para serem executadas no momento. Em caso de prioridades iguais, pode implementar o seu critério, como quem é a primeira da lista (por exemplo). Nesse trabalho, considere a maior prioridade como sendo 1. Além disso, é obrigatório o uso de múltiplas filas para a gerência de prioridade.
+- The time counting (slice) can be implemented as you wish, such as with libraries or through a shared global variable.
 
-- Você deve considerar mais filas de aptos para diferentes prioridades. Acrescente duas taks para cada prioridade criada.
+- Remember that the task list (ready queue) must be kept "alive" throughout the execution. Therefore, it is recommended to implement it in a library (it can be within the schedulers.h itself) and share it as a global variable.
 
-- A contagem de tempo (slice) pode ser implementada como desejar, como com bibliotecas ou por uma variável global compartilhada.
+- Again, you can modify the files, especially the “list”, but without compromising their original essence. However, this file helps in creating priority since it works in the stack model.
 
-- Lembre-se que a lista de task (fila de aptos) deve ser mantida “viva” durante toda a execução. Sendo assim, é recomendado implementar ela em uma biblioteca (podendo ser dentro da próprio schedulers.h) e compartilhar como uma variável global.
+- To use the Makefile, generate a schedule_rr.c, schedule_rrp.c, and schedule_fcfs.c file that include the schedulers.h library (you can also change the library name). If you don't want to use the Makefile, you can work with the preferred IDE or compile via terminal.
 
-- Novamente, você pode modificar os arquivos, principalmente o “list”, mas sem deixar a essência original deles comprometida. Porém, esse arquivo auxilia na criação de prioridade, já que funciona no modelo pilha.
+- Use a slice of a maximum of 10 time units.
 
-- Para usar o Makefile, gere um arquivo schedule_rr.c, schedule_rrp.c e schedule_fcfs.c que incluem a biblioteca schedulers.h (pode modificar o nome da biblioteca também). Caso não queira usar o Makefile, pode trabalhar com a IDE de preferência ou compilar via terminal.
-
-- Utilize um slice de no máximo 10 unidades de tempo.
-
-- Para os algoritmos, você deverá, via uma primeira thread extra, a simulação da ocorrência do timer em hardware. Essa thread irá fazer a simulação do tempo e gerará a flag de estouro do tempo (para o slice). Além disso, para o algoritmo EDF será necessário avaliar o deadline das tasks e verificar qual das tasks está com o menor deadline.
+- For the algorithms, you must use a first extra thread to simulate the occurrence of the timer in hardware. This thread will simulate the time and generate the timer overflow flag (for the slice). Additionally, for the EDF algorithm, it will be necessary to evaluate the tasks' deadlines and check which task has the closest deadline.
